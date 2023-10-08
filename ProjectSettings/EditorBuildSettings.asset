@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SceneMin1006.unity
+    path: Assets/Scenes/SceneMin1008.unity
     guid: d63f7ec73f437414fa0c621ce5c18db9
   m_configObjects:
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: 656efef17440aed42be9576e4b1f00d1, type: 2}
