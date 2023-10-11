@@ -5,14 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/New Scene.unity
-    guid: 214ae8fce1fc46744aa51e1c3df0bf1f
   - enabled: 1
-    path: Assets/Scenes/MuyanTest.unity
-    guid: 4488a51a4bbafaa44ae3ef0ddaa36d19
+    path: Assets/Scenes/SceneMin1008.unity
+    guid: d63f7ec73f437414fa0c621ce5c18db9
   m_configObjects:
-    Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 22cc407deba229f4e882cf89a83154d3, type: 2}
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: 656efef17440aed42be9576e4b1f00d1, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2eed0aa9f0b77714b9d06d956a49ba4d, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 4a5b1220547b59b4e8b697f932d08173, type: 2}
