@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SceneMin1008.unity
-    guid: d63f7ec73f437414fa0c621ce5c18db9
+    path: Assets/Scenes/MuyanTest.unity
+    guid: 4488a51a4bbafaa44ae3ef0ddaa36d19
   m_configObjects:
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: 656efef17440aed42be9576e4b1f00d1, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2eed0aa9f0b77714b9d06d956a49ba4d, type: 2}
