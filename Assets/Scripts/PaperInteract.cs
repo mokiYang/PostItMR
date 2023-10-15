@@ -1,88 +1,106 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PaperInteract : MonoBehaviour
 {
-    private Vector3 offset;
-    private bool isDragging = false;
-    private Quaternion initialRotation;
-    private GameObject closestWall;
-    private static GameObject draggingPaper;
+    public Transform rightHandControllerTransform; // 右手柄的Transform组件
+    public float rayLength = 100.0f; // 射线检测的距离
+
+    private GameObject intersectedPaper; // 相交的Paper物体
+    private XRRayInteractor rightInteractor;
 
     void Start()
     {
-        initialRotation = transform.rotation;
+        // 订阅事件
+        InputEvent.Instance.onRightGripEnter += OnRightGripEnter;
+        InputEvent.Instance.onRightGripUp += OnRightGripUp;
     }
 
-    void Update()
+    public void test()
     {
-        if (isDragging)
+        Debug.Log("!!!!!test");
+    }
+
+    public void test1()
+    {
+        Debug.Log("!!!!!test1");
+    }
+
+    public void test2()
+    {
+        Debug.Log("!!!!!test2");
+    }
+
+    public void test3()
+    {
+        Debug.Log("!!!!!test3");
+    }
+
+    public void test4()
+    {
+        Debug.Log("!!!!!test4");
+    }
+
+    public void test5()
+    {
+        Debug.Log("!!!!!test5");
+    }
+
+    public void test6()
+    {
+        Debug.Log("!!!!!test6");
+    }
+
+    public void test7()
+    {
+        Debug.Log("!!!!!test7");
+    }
+
+    public void test8()
+    {
+        Debug.Log("!!!!!test8");
+    }
+
+    public void test9()
+    {
+        Debug.Log("!!!!!test9");
+    }
+
+    private void OnRightGripEnter()
+    {
+        Debug.Log("!!!!!OnRightGripEnter");
+        // 发射射线
+        RaycastHit hit;
+        if (rightInteractor.TryGetCurrent3DRaycastHit(out hit))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 newPosition = ray.origin + ray.direction * offset.z;
-            newPosition.x += offset.x;
-            newPosition.y += offset.y;
-            transform.position = newPosition;
-
-            // Find the closest wall while dragging
-            float minDistance = float.MaxValue;
-            GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
-            foreach (GameObject wall in walls)
+            // 检查是否与具有Paper标签的物体相交
+            if (hit.collider.CompareTag("Paper"))
             {
-                float distance = Vector3.Distance(transform.position, wall.transform.position);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestWall = wall;
-                }
-            }
-
-            if (closestWall != null)
-            {
-                float distanceToWall = Vector3.Distance(transform.position, closestWall.transform.position);
-                if (distanceToWall < 1.0f)
-                {
-                    transform.rotation = closestWall.transform.rotation;
-                }
-                else
-                {
-                    transform.rotation = initialRotation;
-                }
-            }
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            isDragging = false;
-            if (draggingPaper == gameObject)
-            {
-                draggingPaper = null;
-                if (closestWall != null)
-                {
-                    float distanceToWall = Vector3.Distance(transform.position, closestWall.transform.position);
-                    if (distanceToWall < 1.0f)
-                    {
-                        transform.rotation = closestWall.transform.rotation;
-                    }
-                }
+                Debug.Log("!!!!!Paper");
+                intersectedPaper = hit.collider.gameObject;
+                // 旋转并吸附到手柄位置
+                intersectedPaper.transform.Rotate(-90, 0, 0, Space.Self);
+                intersectedPaper.transform.position = rightHandControllerTransform.position;
             }
         }
     }
 
-    void OnMouseDown()
+    private void OnRightGripUp()
     {
-        if (draggingPaper == null)
+        if (intersectedPaper != null)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.tag == "Paper")
-            {
-                isDragging = true;
-                draggingPaper = gameObject;
-                offset = hit.point - hit.collider.gameObject.transform.position;
-                offset.z = (hit.point - Camera.main.transform.position).magnitude;
-            }
+            // 重置旋转
+            intersectedPaper.transform.Rotate(0, 0, 0, Space.Self);
+            intersectedPaper = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        // 从事件中移除方法
+        InputEvent.Instance.onRightGripEnter -= OnRightGripEnter;
+        InputEvent.Instance.onRightGripUp -= OnRightGripUp;
     }
 }
