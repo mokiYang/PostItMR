@@ -1,59 +1,100 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class PaperInteract : MonoBehaviour
 {
-    public Transform rightHandControllerTransform; // 右手柄的Transform组件
-    public float rayLength = 100.0f; // 射线检测的距离
+    private Quaternion originalRotation;
 
-    private GameObject intersectedPaper; // 相交的Paper物体
-    private XRRayInteractor rightInteractor;
-
-    void Start()
+    private void Start()
     {
-        // 订阅事件
-        InputEvent.Instance.onRightGripEnter += OnRightGripEnter;
-        InputEvent.Instance.onRightGripUp += OnRightGripUp;
+        originalRotation = transform.rotation;
     }
 
-    public void test()
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("!!!!!!!!!!!OnCollisionEnter");
+        if (collision.collider.CompareTag("Wall"))
+        {
+            // 获取碰撞点的法线
+            Vector3 normal = collision.contacts[0].normal;
+
+            // 计算旋转角度以使 paper 的法线与 wall 的法线一致
+            Vector3 paperNormal = transform.forward;
+            Quaternion rotation = Quaternion.FromToRotation(paperNormal, normal);
+
+            transform.rotation = rotation * transform.rotation;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            transform.rotation = originalRotation;
+        }
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        Debug.Log("!!!!!!!!!!!OnTriggerEnter");
+        if (collision.CompareTag("Wall"))
+        {
+            // 获取碰撞点的法线
+            Vector3 normal = collision.transform.forward;
+
+            // 计算旋转角度以使 paper 的法线与 wall 的法线一致
+            Vector3 paperNormal = transform.forward;
+            Quaternion rotation = Quaternion.FromToRotation(paperNormal, normal);
+
+            transform.rotation = rotation * transform.rotation;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.CompareTag("Wall"))
+        {
+            transform.rotation = originalRotation;
+        }
+    }
+
+    public void Test()
     {
         Debug.Log("!!!!!test");
     }
 
-    public void test1()
+    public void Test1()
     {
         Debug.Log("!!!!!test1");
     }
 
-    public void test2()
+    public void Test2()
     {
         Debug.Log("!!!!!test2");
     }
 
-    public void test3()
+    public void Test3()
     {
         Debug.Log("!!!!!test3");
     }
 
-    public void test4()
+    public void Test4()
     {
         Debug.Log("!!!!!test4");
     }
 
-    public void test5()
+    public void Test5()
     {
         Debug.Log("!!!!!test5");
     }
 
-    public void test6()
+    public void Test6()
     {
         Debug.Log("!!!!!test6");
     }
 
-    public void test7()
+    public void Test7()
     {
         Debug.Log("!!!!!test7");
     }
@@ -66,41 +107,5 @@ public class PaperInteract : MonoBehaviour
     public void test9()
     {
         Debug.Log("!!!!!test9");
-    }
-
-    private void OnRightGripEnter()
-    {
-        Debug.Log("!!!!!OnRightGripEnter");
-        // 发射射线
-        RaycastHit hit;
-        if (rightInteractor.TryGetCurrent3DRaycastHit(out hit))
-        {
-            // 检查是否与具有Paper标签的物体相交
-            if (hit.collider.CompareTag("Paper"))
-            {
-                Debug.Log("!!!!!Paper");
-                intersectedPaper = hit.collider.gameObject;
-                // 旋转并吸附到手柄位置
-                intersectedPaper.transform.Rotate(-90, 0, 0, Space.Self);
-                intersectedPaper.transform.position = rightHandControllerTransform.position;
-            }
-        }
-    }
-
-    private void OnRightGripUp()
-    {
-        if (intersectedPaper != null)
-        {
-            // 重置旋转
-            intersectedPaper.transform.Rotate(0, 0, 0, Space.Self);
-            intersectedPaper = null;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        // 从事件中移除方法
-        InputEvent.Instance.onRightGripEnter -= OnRightGripEnter;
-        InputEvent.Instance.onRightGripUp -= OnRightGripUp;
     }
 }
