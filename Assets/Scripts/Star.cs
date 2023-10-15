@@ -10,8 +10,10 @@ public class Star : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //add score
+            GameControllerMP.instance.AddScore();
 
             //play sfx
+
 
             //play vfx
             Instantiate(vfx, transform.position, Quaternion.identity);
