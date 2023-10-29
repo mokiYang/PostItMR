@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private float gravity = 15f;
     private Vector3 velocity;
+    private Vector3 _initialOffset;
+    private Quaternion _initialRelativeRotation;
 
     private void Start()
     {
@@ -30,6 +32,12 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("cant find eventsystem");
         }
 
+        // 计算初始位置偏移量
+        _initialOffset = transform.position - ParentModule.transform.position;
+
+        // 计算初始相对旋转
+        _initialRelativeRotation = Quaternion.Inverse(ParentModule.transform.rotation) * transform.rotation;
+
         if (ParentModule)
         {
             // 获取物体的 x y 轴范围
@@ -40,32 +48,92 @@ public class PlayerController : MonoBehaviour
     {
         if (!StatusManager.isBuild)
         {
-            Vector3 moveDirection = new Vector3(-1 * StatusManager.axisDirection.x, 0, 0);
-            rb.MovePosition(rb.position + moveDirection * playerSpeed * Time.fixedDeltaTime);
+            // 计算初始位置偏移量
+            _initialOffset = transform.position - ParentModule.transform.position;
 
-            if (StatusManager.isJump && canJump)
+            // 计算初始相对旋转
+            _initialRelativeRotation = Quaternion.Inverse(ParentModule.transform.rotation) * transform.rotation;
+
+            Vector3 moveDirection = StatusManager.axisDirection.x * transform.right;
+            rb.MovePosition(rb.position + moveDirection * Time.deltaTime);
+        }
+
+
+        if (StatusManager.isBuild)
+        {
+            // 根据ParentModule的旋转更新偏移量
+            Vector3 rotatedOffset = ParentModule.transform.rotation * _initialOffset;
+
+            // 根据ParentModule的位置和旋转后的偏移量设置player的位置
+            transform.position = ParentModule.transform.position + rotatedOffset;
+
+            // 根据ParentModule的旋转和初始相对旋转设置player的旋转
+            transform.rotation = ParentModule.transform.rotation * _initialRelativeRotation;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (StatusManager.isBuild)
+        {
+            return;
+        }
+
+        // Controller();
+    }
+
+    private void Controller()
+    {
+        Vector3 moveDirection = new Vector3(-1 * StatusManager.axisDirection.x, 0, 0);
+        RaycastHit rayHit;
+
+        if (Physics.Raycast(transform.position, moveDirection, out rayHit, raycastDistance))
+        {
+            if (rayHit.collider.CompareTag("Road"))
             {
-                canJump = false;
-                isJumping = true;
-                velocity = new Vector3(0f, 0f, -1 * jumpForce);
+                moveDirection = new Vector3(0f, 0f, 0f);
             }
+        }
 
-            if (isJumping)
+        if (StatusManager.isJump && canJump)
+        {
+            canJump = false;
+            isJumping = true;
+            velocity = new Vector3(0f, 0f, -1 * jumpForce);
+        }
+
+        if (isJumping)
+        {
+            velocity.z += gravity * Time.fixedDeltaTime;
+            RaycastHit hit;
+            Vector3 rayDirection = new Vector3(0f, 0f, 1f);
+
+            // palyer 开始向下运动的时候才做检查
+            if (velocity.z > 0 && Physics.Raycast(transform.position, rayDirection, out hit, raycastDistance))
             {
-                rb.AddForce(velocity);
-                velocity.z += gravity * Time.fixedDeltaTime;
-                RaycastHit hit;
-                Vector3 rayDirection = new Vector3(0f, 0f, 1f);
-
-                // palyer 开始向下运动的时候才做检查
-                if (velocity.z > 0 && Physics.Raycast(transform.position, rayDirection, out hit, raycastDistance))
+                if (hit.collider.CompareTag("Road"))
                 {
-                    if (hit.collider.CompareTag("Road"))
-                    {
-                        isJumping = false;
-                        canJump = true;
-                    }
+                    isJumping = false;
+                    canJump = true;
                 }
+            }
+        }
+        else
+        {
+            velocity = new Vector3(0f, 0f, 0f);
+        }
+
+        Vector3 direction = moveDirection * playerSpeed + velocity;
+        rb.MovePosition(rb.position + direction * Time.fixedDeltaTime);
+
+        RaycastHit starHit;
+
+        if (Physics.Raycast(transform.position, direction, out starHit, raycastDistance))
+        {
+            if (starHit.collider.CompareTag("Star"))
+            {
+                GameControllerMP.instance.AddScore();
+                Destroy(starHit.collider.gameObject);
             }
         }
     }
