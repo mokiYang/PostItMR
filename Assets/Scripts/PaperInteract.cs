@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PaperInteract : MonoBehaviour
 {
+    public float detectionRadius;
+
     private Quaternion originalRotation;
 
     private void Start()
@@ -11,28 +13,32 @@ public class PaperInteract : MonoBehaviour
         originalRotation = transform.rotation;
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void Update()
     {
-        if (collision.CompareTag("Wall"))
-        {
-            // 获取碰撞点的法线
-            // Vector3 normal = collision.transform.forward;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        Collider targetCollider = null;
+        float minDistance = Mathf.Infinity;
 
-            // 计算旋转角度以使 paper 的法线与 wall 的法线一致
-            // Vector3 paperNormal = transform.forward;
-            // Quaternion rotation = Quaternion.FromToRotation(paperNormal, normal);
- 
-            // transform.rotation = rotation * transform.rotation;
-            transform.rotation = collision.transform.rotation;
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Wall"))
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    targetCollider = collider;
+                }
+            }
+        }
+
+        if (targetCollider)
+        {
+            transform.rotation = targetCollider.transform.rotation;
+        }
+        else
+        {
+            transform.rotation = originalRotation;
         }
     }
-
-    //private void OnTriggerExit(Collider collision)
-    //{
-        //Debug.Log("!!!!!!!!!!!OnTriggerExit");
-        //if (collision.CompareTag("Wall"))
-        //{
-            //transform.rotation = originalRotation;
-        //}
-    //}
 }
