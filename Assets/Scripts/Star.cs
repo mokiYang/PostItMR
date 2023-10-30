@@ -9,7 +9,6 @@ public class Star : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("here2!!");
             //add score
             GameControllerMP.instance.AddScore();
 
@@ -17,24 +16,7 @@ public class Star : MonoBehaviour
 
 
             //play vfx
-            Instantiate(vfx, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("here1!!");
-            //add score
-            GameControllerMP.instance.AddScore();
-
-            //play sfx
-
-
-            //play vfx
-            Instantiate(vfx, transform.position, Quaternion.identity);
+            // Instantiate(vfx, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }
