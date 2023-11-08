@@ -33,11 +33,20 @@ public class PlayerControllerNew : MonoBehaviour
         }
         else
         {
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            rb.freezeRotation = true;
-            Vector3 moveDirection = -1 * StatusManager.axisDirection.x * transform.right;
-            rb.MovePosition(rb.position + moveDirection * playerSpeed * Time.deltaTime);
+            if (tag == "Player")
+            {
+                rb.useGravity = true;
+                rb.isKinematic = false;
+                rb.freezeRotation = true;
+                Vector3 moveDirection = -1 * StatusManager.axisDirection.x * transform.right;
+                rb.MovePosition(rb.position + moveDirection * playerSpeed * Time.deltaTime);
+            }
+            if (tag == "Player3D")
+            {
+                Vector3 xMoveDirection = -1 * StatusManager.axisDirection.x * transform.right;
+                Vector3 yMoveDirection = -1 * StatusManager.axisDirection.y * transform.forward;
+                rb.MovePosition(rb.position + xMoveDirection * playerSpeed * Time.deltaTime + yMoveDirection * playerSpeed * Time.deltaTime);
+            }
         }
     }
 }
