@@ -35,6 +35,7 @@ public class PlayerControllerNew : MonoBehaviour
         {
             if (tag == "Player")
             {
+                Debug.Log("trans left: " + transform.right);
                 rb.useGravity = true;
                 rb.isKinematic = false;
                 rb.freezeRotation = true;
@@ -43,9 +44,10 @@ public class PlayerControllerNew : MonoBehaviour
             }
             if (tag == "Player3D")
             {
-                Vector3 xMoveDirection = -1 * StatusManager.axisDirection.x * transform.right;
-                Vector3 yMoveDirection = -1 * StatusManager.axisDirection.y * transform.forward;
-                rb.MovePosition(rb.position + xMoveDirection * playerSpeed * Time.deltaTime + yMoveDirection * playerSpeed * Time.deltaTime);
+                rb.useGravity = true;
+                rb.isKinematic = false;
+                // rb.freezeRotation = true;
+                rb.MovePosition(rb.position + new Vector3(-1 * StatusManager.axisDirection.x, 0, -1 * StatusManager.axisDirection.y) * playerSpeed * Time.deltaTime);
             }
         }
     }

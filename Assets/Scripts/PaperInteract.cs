@@ -5,6 +5,8 @@ using UnityEngine;
 public class PaperInteract : MonoBehaviour
 {
     public float detectionRadius;
+    public bool canRotate = true;
+
 
     private Quaternion originalRotation;
 
@@ -21,7 +23,7 @@ public class PaperInteract : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag("Wall"))
+            if (collider.CompareTag("Wall") && canRotate)
             {
                 float distance = Vector3.Distance(transform.position, collider.transform.position);
                 if (distance < minDistance)
@@ -38,7 +40,7 @@ public class PaperInteract : MonoBehaviour
         }
         else
         {
-            transform.rotation = originalRotation;
+            // transform.rotation = originalRotation;
         }
     }
 }
