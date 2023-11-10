@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerControllerNew : MonoBehaviour
 {
-    private StatusManager StatusManager;
     public float playerSpeed;
+    public Vector3 direction;
+
+    private StatusManager StatusManager;
     private Rigidbody rb;
 
     private void Start()
@@ -39,7 +41,7 @@ public class PlayerControllerNew : MonoBehaviour
                 rb.useGravity = true;
                 rb.isKinematic = false;
                 rb.freezeRotation = true;
-                Vector3 moveDirection = -1 * StatusManager.axisDirection.x * transform.right;
+                Vector3 moveDirection = -1 * StatusManager.axisDirection.x * (direction == new Vector3(0f, 0f, 0f) ? transform.right : direction);
                 rb.MovePosition(rb.position + moveDirection * playerSpeed * Time.deltaTime);
             }
             if (tag == "Player3D")

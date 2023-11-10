@@ -112,3 +112,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goal: 1
   open: {fileID: 2100000, guid: 85d6f486ab6021f43b15c1e62c59ea7c, type: 2}
+  halfOpen: {fileID: 2100000, guid: 60129a66fa86f76458a68fb0ca446207, type: 2}

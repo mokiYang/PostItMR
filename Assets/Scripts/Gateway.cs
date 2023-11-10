@@ -26,7 +26,8 @@ public class Gateway : MonoBehaviour
             player3D.SetActive(false);
             if (needRotate)
             {
-                player2D.transform.Rotate(transform.right, 90, Space.World);
+                player2D.transform.rotation = new Quaternion(90, 90, 0, 0);
+                player2D.GetComponent<PlayerControllerNew>().direction = new Vector3(0f, 0f, -1f);
             }
         }
         if (other.CompareTag("Player") && tag == "23D")

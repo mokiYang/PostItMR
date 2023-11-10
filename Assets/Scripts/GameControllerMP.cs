@@ -8,7 +8,8 @@ public class GameControllerMP : MonoBehaviour
     public static GameControllerMP instance;
 
     public int score = 0;
-    public int index = 0;
+    // public int scenceIndex = 0;
+    public bool isPass = false;
 
     public void Awake()
     {
@@ -25,9 +26,19 @@ public class GameControllerMP : MonoBehaviour
         score ++;
     }
 
+    public void Pass()
+    {
+        isPass = true;
+    }
+
     public void LoadNextLevel()
     {
-        index++;
-        SceneManager.LoadScene(index);
+        // scenceIndex++;
+        // SceneManager.LoadScene(scenceIndex);
+    }
+
+    public void ReLoadLevel()
+    {
+        // SceneManager.LoadScene(scenceIndex);
     }
 }
