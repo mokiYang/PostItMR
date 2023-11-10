@@ -13,7 +13,8 @@ public class ExitMP : MonoBehaviour
         if (GameControllerMP.instance.GetScore() >= goal)
         {
             MeshRenderer meshRenderer = transform.GetComponent<MeshRenderer>();
-            StartCoroutine(ChangeMaterialWithDelay(meshRenderer));
+            //StartCoroutine(ChangeMaterialWithDelay(meshRenderer));
+            meshRenderer.material = open;
         }
     }
 
